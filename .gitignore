@@ -4,3 +4,4 @@ env
 oc-lettings-site.sqlite3
 .env
 .media
+env/

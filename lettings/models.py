@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinLengthValidator
+from typing import Any
 
 
 class Address(models.Model):
@@ -17,6 +18,10 @@ class Address(models.Model):
 class Letting(models.Model):
     title = models.CharField(max_length=256)
     address = models.OneToOneField(Address, on_delete=models.CASCADE)
+
+    def __init__(self, *args: Any, **kwargs: Any):
+        super().__init__(args, kwargs)
+        self.id = None
 
     def __str__(self):
         return self.title

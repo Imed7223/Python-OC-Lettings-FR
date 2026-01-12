@@ -1,8 +1,10 @@
 [flake8]
-max-line-length = 119
 exclude =
-    env,
     .git,
     __pycache__,
-    migrations,
-    .\env
+    env,
+    venv,
+    .venv,
+    .env,
+    */site-packages/*
+max-line-length = 119
