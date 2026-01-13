@@ -1,14 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from profiles.models import Profile
 
 
-def profiles_index(request):
+def index(request):
     profiles = Profile.objects.all()
     context = {"profiles_list": profiles}
-    return render(request, "profiles_index.html", context)
+    return render(request, "profiles/index.html", context)
 
 
 def profile(request, username):
-    profile = Profile.objects.get(user__username=username)
-    context = {'profile': profile}
-    return render(request, 'profile.html', context)
+    profile = get_object_or_404(Profile, user__username=username)
+    context = {"profile": profile}
+    return render(request, "profiles/profile.html", context)
