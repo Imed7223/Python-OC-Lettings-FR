@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from lettings.models import Letting
 
 
+"""Views for the lettings application."""
+
+
 def index(request):
     lettings_list = Letting.objects.all()
     context = {"lettings_list": lettings_list}
@@ -9,6 +12,7 @@ def index(request):
 
 
 def letting(request, letting_id):
+    """Display the list of lettings."""
     letting = get_object_or_404(Letting, id=letting_id)
     context = {"title": letting.title, "address": letting.address}
     return render(request, "lettings/letting.html", context)
