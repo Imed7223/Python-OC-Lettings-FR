@@ -1,3 +1,9 @@
+"""URL configuration for the lettings application.
+
+This module defines the URL patterns that route incoming HTTP
+requests to the lettings views.
+"""
+
 from django.urls import path
 from . import views
 
