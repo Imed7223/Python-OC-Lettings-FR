@@ -3,18 +3,24 @@ import os
 from pathlib import Path
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from dotenv import load_dotenv
 
+
+load_dotenv()  # va lire le fichier .env à la racine du projet
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SENTRY_DSN = os.getenv("SENTRY_DSN", "")
 
-sentry_sdk.init(
-    dsn="https://9043251ff5d8c2fd2f342e57fe3670ba@o4510571549753344.ingest.de.sentry.io/4510710668329040",
-    integrations=[DjangoIntegration()],
-    send_default_pii=True,
-    traces_sample_rate=1.0,
-)
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        send_default_pii=True,
+        traces_sample_rate=1.0,
+        enable_tracing=True,  # optionnel
+    )
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
