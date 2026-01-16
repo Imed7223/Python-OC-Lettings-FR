@@ -6,7 +6,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
 from dotenv import load_dotenv
 
 
-load_dotenv()  # charge les variables définies dans .env
+load_dotenv()  # charge les variables définies dans (.env)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,7 +19,6 @@ if SENTRY_DSN:
         integrations=[DjangoIntegration()],
         send_default_pii=True,
         traces_sample_rate=1.0,
-        enable_tracing=True,
     )
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -104,7 +103,8 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME":
+            "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
