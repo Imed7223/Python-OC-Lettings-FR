@@ -78,18 +78,3 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-  notify:
-    needs: docker-build
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-    - name: Notify Discord (success/failure)
-      uses: Ilshidur/action-discord@master
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        args: |
-          🚀 Pipeline **${{ job.status }}** pour OC Lettings!
-          Commit: ${{ github.sha }}
-          Branch: ${{ github.ref }}
