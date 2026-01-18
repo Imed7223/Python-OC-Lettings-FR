@@ -16,9 +16,16 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(Letting)
 class LettingAdmin(admin.ModelAdmin):
+
     """Admin interface options for Letting.
 
-    Displays the letting title and associated address in the admin list view.
-    """
+        Displays the letting title and associated address in the admin list view.
+        """
 
-    list_display = ("title", "address")
+    def get_queryset(self, request):
+        return super().get_queryset(request)
+    list_display = ("title", "get_address")
+    def get_address(self, obj):
+        return str(obj.address)
+    get_address.short_description = "Address"
+
