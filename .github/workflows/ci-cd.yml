@@ -7,11 +7,12 @@ on:
     branches: [ main ]
 
 env:
-  PYTHON_VERSION: '3.14'
+  # CORRECTION : Passage à la version stable 3.11 pour compatibilité Django 4.2
+  PYTHON_VERSION: '3.11'
   DJANGO_SETTINGS_MODULE: 'oc_lettings_site.settings'
 
 jobs:
-  # 1) Lint + Tests + Coverage (toutes branches)
+  # 1) Lint + Tests + Coverage
   lint-test:
     runs-on: ubuntu-latest
     steps:
@@ -32,26 +33,38 @@ jobs:
     - name: Install & Lint
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt ruff pytest pytest-cov
+        # Installation des dépendances corrigées (Sphinx/Docutils via requirements.txt)
+        pip install -r requirements.txt 
+        # Note: ruff, pytest et pytest-cov devraient être dans votre requirements.txt
+        # Sinon, gardez-les ici :
+        pip install ruff pytest pytest-cov 
+        
+        # Exécution du linter (Ruff)
         ruff check . --line-length=88
 
     - name: Test with coverage
       env:
+        # Assurez-vous que ces secrets sont configurés dans GitHub > Settings > Secrets
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        SECRET_KEY: "test-key-for-ci"
       run: |
+        # Correction de la commande pytest pour inclure les nouveaux modules
         pytest --cov=oc_lettings_site --cov=lettings --cov=profiles \
                --cov-report=xml --cov-report=term-missing \
                --junitxml=pytest.xml
 
     - name: Upload coverage
+      # Utilisation de v4 (nécessite souvent un token maintenant)
       uses: codecov/codecov-action@v4
       with:
         file: coverage.xml
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   # 2) Docker Build & Push (main uniquement)
   docker-build:
     needs: lint-test
     runs-on: ubuntu-latest
+    # Déclenchement uniquement sur push dans main
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
