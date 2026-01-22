@@ -56,4 +56,3 @@ def test_profile_detail_view(client):
     assert "jane" in response.content.decode()
     assert "Lyon" in response.content.decode()
     assert "profiles/profile.html" in [t.name for t in response.templates]
-

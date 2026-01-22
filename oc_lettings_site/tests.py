@@ -33,4 +33,3 @@ def test_index_view_template(client):
     response = client.get(url)
 
     assert "index.html" in [t.name for t in response.templates]
-
