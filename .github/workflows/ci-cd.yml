@@ -11,10 +11,9 @@ env:
   DJANGO_SETTINGS_MODULE: 'oc_lettings_site.settings'
 
 jobs:
-  # 1) Lint + tests + couverture (toutes branches)
+  # 1) Lint + Tests + Coverage (toutes branches)
   lint-test:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -30,16 +29,13 @@ jobs:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
 
-    - name: Install dependencies
+    - name: Install dependencies & Lint
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest pytest-cov flake8
+        pip install -r requirements.txt ruff pytest pytest-cov
+        ruff check . --line-length=88
 
-    - name: Lint with flake8
-      run: flake8 . --max-line-length=88
-
-    - name: Test with pytest (coverage)
+    - name: Test with coverage
       env:
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       run: |
@@ -52,15 +48,23 @@ jobs:
       with:
         file: coverage.xml
 
-  # 2) Build & push Docker (seulement sur main, et seulement si tests OK)
+    # Discord notification (toujours)
+    - name: Discord Notification
+      if: always()
+      uses: Ilshidur/action-discord@v2
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      with:
+        args: '🚀 Pipeline **${{ job.status }}** pour OC Lettings !'
+
+  # 2) Docker Build & Push (seulement main)
   docker-build:
     needs: lint-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -71,7 +75,7 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push Docker image
+    - name: Build and push
       uses: docker/build-push-action@v6
       with:
         context: .
@@ -82,12 +86,13 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-  # 3) Déploiement prod (seulement si docker-build OK ET sur master)
+  # 3) Déploiement (seulement main)
   deploy:
     needs: docker-build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
     - name: Trigger Render deploy
       run: curl -X POST ${{ secrets.RENDER_WEBHOOK_URL }}
+
