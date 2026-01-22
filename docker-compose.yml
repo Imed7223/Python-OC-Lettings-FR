@@ -8,7 +8,7 @@ services:
       - "8000:8000"
     # Volume pour la DB SQLite (persistance)
     volumes:
-      - db_data:/app/db.sqlite3
+      - db_data:/app/oc-lettings-site.sqlite3
     env_file:
       - .env
     # Si tu veux garder la CMD du Dockerfile, tu peux l’omettre ici.
