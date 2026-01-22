@@ -13,6 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SENTRY_DSN = os.getenv("SENTRY_DSN", "")
 
+# Sentry
 if SENTRY_DSN:
     sentry_sdk.init(
         dsn=SENTRY_DSN,

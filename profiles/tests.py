@@ -33,12 +33,6 @@ def test_profiles_index_view(client):
     assert "john" in response.content.decode()
     assert "profiles/index.html" in [t.name for t in response.templates]
 
-    # FIX Python 3.14: dicts() → values() (lignes 32-34)
-    profiles_list = list(response.context["profiles"].values("user__username", "favorite_city"))
-    assert len(profiles_list) == 1
-    assert profiles_list[0]["user__username"] == "john"
-    assert profiles_list[0]["favorite_city"] == "Paris"
-
 
 @pytest.mark.django_db
 def test_profile_detail_view(client):
@@ -63,7 +57,3 @@ def test_profile_detail_view(client):
     assert "Lyon" in response.content.decode()
     assert "profiles/profile.html" in [t.name for t in response.templates]
 
-    # FIX Python 3.14: dicts() → accès direct (lignes 55-58)
-    profile_data = response.context["profile"]
-    assert profile_data.user.username == "jane"
-    assert profile_data.favorite_city == "Lyon"

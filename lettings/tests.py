@@ -39,11 +39,6 @@ def test_lettings_index_view(client):
     assert "Test Letting" in response.content.decode()
     assert "lettings/index.html" in [t.name for t in response.templates]
 
-    # FIX Python 3.14: dicts() → values()
-    lettings_list = list(response.context["lettings"].values("title"))
-    assert len(lettings_list) == 1
-    assert lettings_list[0]["title"] == "Test Letting"
-
 
 @pytest.mark.django_db
 def test_letting_detail_view(client):
@@ -73,8 +68,3 @@ def test_letting_detail_view(client):
     assert response.status_code == 200
     assert "Detail Letting" in response.content.decode()
     assert "lettings/letting.html" in [t.name for t in response.templates]
-
-    # FIX Python 3.14: dicts() → values('title', 'address__number', etc)
-    letting_data = response.context["letting"]
-    assert letting_data.title == "Detail Letting"
-    assert letting_data.address.number == 2

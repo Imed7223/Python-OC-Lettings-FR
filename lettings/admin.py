@@ -25,7 +25,7 @@ class LettingAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request)
     list_display = ("title", "get_address")
+
     def get_address(self, obj):
         return str(obj.address)
     get_address.short_description = "Address"
-
