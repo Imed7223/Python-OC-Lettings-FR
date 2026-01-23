@@ -46,8 +46,11 @@ LOGGING = {
     },
 }
 
-ALLOWED_HOSTS = ['python-oc-lettings-fr-site-f2ri.onrender.com', 'localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = [
+    'python-oc-lettings-fr-site-f2ri.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 # Application definition
 
