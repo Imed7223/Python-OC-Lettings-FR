@@ -65,7 +65,7 @@ Python ci-dessus (à moins qu'un environnement virtuel ne soit activé).
 - `cd /path/to/Python-OC-Lettings-FR`
 - Ouvrir une session shell `sqlite3`
 - Se connecter à la base de données :  
-  `.open oc-lettings-site.sqlite3`
+  `.open test_db.sqlite3`
 - Afficher les tables dans la base de données :  
   `.tables`
 - Afficher les colonnes dans la table des profils :  
