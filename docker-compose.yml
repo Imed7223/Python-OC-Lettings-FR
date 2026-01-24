@@ -12,11 +12,10 @@ services:
       - ./test_db.sqlite3:/app/test_db.sqlite3
     env_file:
       - .env
-    # Si tu veux garder la CMD du Dockerfile, tu peux l’omettre ici.
-    # Sinon tu peux la redéfinir:
-    # command: >
-    #   sh -c "python manage.py migrate --noinput &&
-    #          gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000"
+    # On force la migration AVANT de lancer Gunicorn
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+            gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000"
     restart: unless-stopped
 
 volumes:
