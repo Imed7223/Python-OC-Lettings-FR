@@ -12,6 +12,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 COPY . .
 
+# Copier la base de données avec les données existantes
+COPY test_db.sqlite3 /app/test_db.sqlite3
+
 RUN python manage.py collectstatic --noinput && \
     python manage.py migrate --noinput
 

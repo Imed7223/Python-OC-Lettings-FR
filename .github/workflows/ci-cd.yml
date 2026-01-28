@@ -2,7 +2,7 @@ name: CI/CD - OC Lettings Django
 
 on:
   push:
-    branches: [ main, develop, feature/modular-architecture ]
+    branches: [ feature/modular-architecture ]
   pull_request:
     branches: [ main ]
 
@@ -52,13 +52,6 @@ jobs:
         pytest --cov=oc_lettings_site --cov=lettings --cov=profiles \
                --cov-report=xml --cov-report=term-missing \
                --junitxml=pytest.xml
-
-    - name: Upload coverage
-      # Utilisation de v4 (nécessite souvent un token maintenant)
-      uses: codecov/codecov-action@v4
-      with:
-        file: coverage.xml
-        token: ${{ secrets.CODECOV_TOKEN }}
 
   # 2) Docker Build & Push (main uniquement)
   docker-build:
