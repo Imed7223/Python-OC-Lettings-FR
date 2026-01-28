@@ -46,7 +46,7 @@ LOGGING = {
     },
 }
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "python-oc-lettings-fr-site.onrender.com"]
 
 # Application definition
 
