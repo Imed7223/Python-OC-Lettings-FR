@@ -8,19 +8,21 @@ import pytest
 from django.urls import reverse
 
 
+import pytest
+from django.urls import reverse
+from django.contrib.auth.models import User
+
+
 @pytest.mark.django_db
 def test_index_view_status_code(client):
-    """Test that the index view returns a 200 status and expected text.
+    user = User.objects.create_user(username="testuser", password="Testpass123!")
+    client.force_login(user)
 
-    Args:
-        client: Django test client fixture used to perform HTTP requests.
-    """
     url = reverse("index")
     response = client.get(url)
 
     assert response.status_code == 200
     assert "Orange County Lettings" in response.content.decode()
-
 
 @pytest.mark.django_db
 def test_index_view_template(client):

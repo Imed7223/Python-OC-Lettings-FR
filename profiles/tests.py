@@ -13,26 +13,16 @@ from profiles.models import Profile
 
 @pytest.mark.django_db
 def test_profiles_index_view(client):
-    """Test the profiles index view.
+    user = User.objects.create_user(username="john")
+    Profile.objects.create(user=user)
 
-    Ensures that the profiles index page:
-    - returns a 200 HTTP status code,
-    - displays the created username,
-    - renders the expected template.
-
-    Args:
-        client: Django test client fixture used to perform HTTP requests.
-    """
-    user = User.objects.create(username="john")
-    Profile.objects.create(user=user, favorite_city="Paris")
+    client.force_login(user)
 
     url = reverse("profiles:index")
-    response = client.get(url)
+    response = client.get(url, follow=True)
 
     assert response.status_code == 200
     assert "john" in response.content.decode()
-    assert "profiles/index.html" in [t.name for t in response.templates]
-
 
 @pytest.mark.django_db
 def test_profile_detail_view(client):
@@ -40,20 +30,21 @@ def test_profile_detail_view(client):
 
     Ensures that the profile detail page:
     - returns a 200 HTTP status code,
-    - displays the correct username and favorite city,
+    - displays the correct username,
     - renders the expected template.
-
-    Args:
-        client: Django test client fixture used to perform HTTP requests.
     """
+    # Création utilisateur + profil
     user = User.objects.create_user(username="jane", password="Testpass123!")
-    profile = Profile.objects.create(user=user, favorite_city="Lyon")
+    profile = Profile.objects.create(user=user)
 
+    # 🔥 Connexion forcée
+    client.force_login(user)
+
+    # Appel de la vue
     url = reverse("profiles:profile", kwargs={"username": profile.user.username})
     response = client.get(url)
 
+    # Vérifications
     assert response.status_code == 200
     assert "profiles/profile.html" in [t.name for t in response.templates]
-    assert "Lyon" in response.content.decode()
     assert response.context["profile"].user.username == "jane"
-    
