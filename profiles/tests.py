@@ -46,13 +46,14 @@ def test_profile_detail_view(client):
     Args:
         client: Django test client fixture used to perform HTTP requests.
     """
-    user = User.objects.create(username="jane")
+    user = User.objects.create_user(username="jane", password="Testpass123!")
     profile = Profile.objects.create(user=user, favorite_city="Lyon")
 
     url = reverse("profiles:profile", kwargs={"username": profile.user.username})
     response = client.get(url)
 
     assert response.status_code == 200
-    assert "jane" in response.content.decode()
-    assert "Lyon" in response.content.decode()
     assert "profiles/profile.html" in [t.name for t in response.templates]
+    assert "Lyon" in response.content.decode()
+    assert response.context["profile"].user.username == "jane"
+    

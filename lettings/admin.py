@@ -1,31 +1,46 @@
-"""Admin configuration for the lettings- application."""
-
 from django.contrib import admin
-from lettings.models import Address, Letting
+from django.utils.html import format_html
+from lettings.models import Address, Letting, LettingImage
+
+
+class LettingImageInline(admin.TabularInline):
+    model = LettingImage
+    extra = 3
+    max_num = 9  # + 1 image principale = 10 max
+    fields = ("image", "order", "image_preview")
+    readonly_fields = ("image_preview",)
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="100" height="70" style="object-fit:cover;border-radius:4px"/>',
+                obj.image.url
+            )
+        return "—"
+    image_preview.short_description = "Aperçu"
 
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    """Admin interface options for Address.
-
-    Displays key address fields in the Django admin list view.
-    """
-
     list_display = ("number", "street", "city", "state", "zip_code", "country_iso_code")
 
 
 @admin.register(Letting)
 class LettingAdmin(admin.ModelAdmin):
-
-    """Admin interface options for Letting.
-
-        Displays the letting title and associated address in the admin list view.
-        """
-
-    def get_queryset(self, request):
-        return super().get_queryset(request)
-    list_display = ("title", "get_address")
+    list_display = ("title", "get_address", "price_per_night", "rooms", "area", "image_preview")
+    list_filter = ("address__city", "rooms")
+    search_fields = ("title", "address__city", "address__street")
+    inlines = [LettingImageInline]
 
     def get_address(self, obj):
         return str(obj.address)
-    get_address.short_description = "Address"
+    get_address.short_description = "Adresse"
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="80" height="60" style="object-fit:cover;border-radius:4px"/>',
+                obj.image.url
+            )
+        return "—"
+    image_preview.short_description = "Photo principale"

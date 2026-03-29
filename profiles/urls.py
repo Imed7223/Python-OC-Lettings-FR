@@ -11,5 +11,6 @@ app_name = "profiles"
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("edit/", views.edit_profile, name="edit"),
     path("<str:username>/", views.profile, name="profile"),
 ]

@@ -5,6 +5,7 @@ for 404 and 500 HTTP error responses.
 """
 
 from django.shortcuts import render
+from lettings.models import Letting
 
 
 def index(request):
@@ -16,7 +17,12 @@ def index(request):
     Returns:
         HttpResponse: The rendered home page.
     """
-    return render(request, "index.html")
+    latest_lettings = Letting.objects.select_related("address").order_by("-id")[:3]
+    context = {
+        "latest_lettings": latest_lettings,
+        "lettings_count": Letting.objects.count(),
+    }
+    return render(request, "index.html", context)
 
 
 def custom_404(request, exception):

@@ -32,6 +32,8 @@ urlpatterns = [
     path("profiles/", include(("profiles.urls", "profiles"), namespace="profiles")),
     path("admin/", admin.site.urls),
     path("sentry-debug/", trigger_error),
+    path("accounts/", include("accounts.urls")), 
+    path("contact/", include("contact.urls")),   
 ]
 
 # Custom error handlers

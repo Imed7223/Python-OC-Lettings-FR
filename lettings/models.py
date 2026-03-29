@@ -5,7 +5,7 @@ postal addresses and rental properties (lettings) in the system.
 """
 
 from django.db import models
-
+from cloudinary.models import CloudinaryField
 
 class Address(models.Model):
     """Represents a postal address.
@@ -46,11 +46,25 @@ class Letting(models.Model):
         title: The public title of the letting.
         address: The associated Address instance.
     """
-
+    reference = models.CharField(
+        max_length=20,
+        unique=True,
+        blank=True,
+        help_text="Référence unique du logement (ex: LOC-2026-001)"
+    )
     title = models.CharField(max_length=256)
     address = models.OneToOneField(Address, on_delete=models.CASCADE)
+    image = CloudinaryField("image", blank=True, null=True)
+    description = models.TextField(blank=True, default="")
+    price_per_night = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True
+    )
+    rooms = models.PositiveIntegerField(null=True, blank=True)
+    area = models.PositiveIntegerField(null=True, blank=True, help_text="Surface en m²")
+
 
     class Meta:
+        
         """Django model metadata for Letting."""
 
         verbose_name_plural = "Addresses"
@@ -62,3 +76,39 @@ class Letting(models.Model):
             The title of the letting.
         """
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.reference:
+            super().save(*args, **kwargs)
+            self.reference = f"LOC-{self.pk:04d}"
+            Letting.objects.filter(pk=self.pk).update(reference=self.reference)
+        else:
+            super().save(*args, **kwargs)
+    
+    def all_images(self):
+        """Retourne toutes les images : principale + galerie, max 10."""
+        images = []
+        if self.image:
+            images.append(self.image)
+        for img in self.gallery_images.all()[:9]:
+            images.append(img.image)
+        return images[:10]
+
+class LettingImage(models.Model):
+    """Image supplémentaire liée à une location."""
+
+    letting = models.ForeignKey(
+        Letting,
+        on_delete=models.CASCADE,
+        related_name="gallery_images"
+    )
+    image = CloudinaryField("image")
+    order = models.PositiveIntegerField(default=0, help_text="Ordre d'affichage")
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Image galerie"
+        verbose_name_plural = "Images galerie"
+
+    def __str__(self):
+        return f"Image {self.order} — {self.letting.title}"

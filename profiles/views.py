@@ -6,44 +6,58 @@ logging for basic monitoring.
 """
 
 import logging
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
 from profiles.models import Profile
+from profiles.forms import TenantProfileForm
 
 logger = logging.getLogger(__name__)
 
 
+def is_admin(user):
+    return user.is_staff or user.is_superuser
+
+
+@user_passes_test(is_admin, login_url="/accounts/login/")
 def index(request):
-    """Display the list of profiles.
-
-    Retrieves all Profile objects and renders the profiles index page.
-
-    Args:
-        request: HttpRequest object representing the current request.
-
-    Returns:
-        HttpResponse: The rendered profiles index page.
-    """
-    logger.info("Affichage de la liste des profils")
-    profiles = Profile.objects.all()
+    logger.info("Affichage de la liste des profils par %s", request.user.username)
+    profiles = Profile.objects.select_related("user").filter(user__is_active=True)
     context = {"profiles_list": profiles}
     return render(request, "profiles/index.html", context)
 
 
+@login_required
 def profile(request, username):
-    """Display details for a single profile.
+    """Accessible par le propriétaire ou un admin.
+    Si le profil n'existe pas encore, redirige vers edit."""
 
-    Retrieves a Profile instance based on the related User username
-    and renders the profile detail page. Raises a 404 error if the
-    profile does not exist.
+    # Un utilisateur ne peut voir que son propre dossier (sauf admin)
+    if request.user.username != username and not request.user.is_staff:
+        return redirect("profiles:profile", username=request.user.username)
 
-    Args:
-        request: HttpRequest object representing the current request.
-        username: Username of the associated User.
+    # Crée le profil s'il n'existe pas encore au lieu de faire 404
+    profile, created = Profile.objects.get_or_create(
+        user__username=username,
+        defaults={"user": request.user}
+    )
 
-    Returns:
-        HttpResponse: The rendered profile detail page.
-    """
-    logger.info("Affichage du profil pour l'utilisateur %s", username)
-    profile = get_object_or_404(Profile, user__username=username)
-    context = {"profile": profile}
-    return render(request, "profiles/profile.html", context)
+    # Si le profil vient d'être créé, envoie directement vers edit
+    if created:
+        return redirect("profiles:edit")
+
+    logger.info("Affichage du profil pour %s", username)
+    return render(request, "profiles/profile.html", {"profile": profile})
+
+
+@login_required
+def edit_profile(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    if request.method == "POST":
+        form = TenantProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            logger.info("Dossier mis à jour pour %s", request.user.username)
+            return redirect("profiles:profile", username=request.user.username)
+    else:
+        form = TenantProfileForm(instance=profile)
+    return render(request, "profiles/edit_profile.html", {"form": form})
