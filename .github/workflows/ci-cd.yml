@@ -1,7 +1,5 @@
 name: CI/CD - OC Lettings Django
 
-name: CI/CD - OC Lettings Django
-
 on:
   push:
     branches: [ feature/modular-architecture ]
