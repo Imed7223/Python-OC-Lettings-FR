@@ -1,5 +1,7 @@
 name: CI/CD - OC Lettings Django
 
+name: CI/CD - OC Lettings Django
+
 on:
   push:
     branches: [ feature/modular-architecture ]
@@ -9,11 +11,13 @@ on:
 env:
   PYTHON_VERSION: '3.11'
   DJANGO_SETTINGS_MODULE: 'oc_lettings_site.settings'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # ✅ corrige le warning Node.js
 
 jobs:
   # 1) Lint + Tests + Coverage
   lint-test:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -32,10 +36,15 @@ jobs:
     - name: Lint with flake8
       run: flake8 .
 
+    # ✅ IMPORTANT : migrations avant tests
+    - name: Apply migrations
+      run: python manage.py migrate --noinput
+
+    # ✅ tests sécurisés (pas dépendants des secrets GitHub)
     - name: Test with pytest
       env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        SECRET_KEY: "test-secret-key"
+        SENTRY_DSN: ""
       run: |
         pytest --cov=oc_lettings_site --cov=lettings --cov=profiles \
                --cov-report=term-missing
@@ -47,7 +56,8 @@ jobs:
     if: github.event_name == 'push'
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -58,6 +68,7 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    # ✅ build + cache (plus rapide)
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
@@ -66,3 +77,5 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/oc-lettings:latest
           ${{ secrets.DOCKERHUB_USERNAME }}/oc-lettings:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
