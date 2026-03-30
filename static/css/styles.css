@@ -20246,15 +20246,6 @@ section {
   }
 }
 
-.hero-section {
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 480px;
-    display: flex;
-    align-items: center;
-}
 
 .hero-overlay {
     position: absolute;
@@ -20424,4 +20415,22 @@ body {
     padding-right: 5px;
   }
 
+}
+
+
+@media (max-width: 768px) {
+  .hero-section {
+    height: 40vh;
+  }
+}
+
+.hero-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 480px;
+    height: 60vh;
+    display: flex;
+    align-items: center;
 }
