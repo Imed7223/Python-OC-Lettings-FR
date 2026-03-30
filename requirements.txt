@@ -45,3 +45,4 @@ urllib3==2.6.3
 whitenoise==6.11.0
 django-cloudinary-storage
 cloudinary
+django==4.2.18
