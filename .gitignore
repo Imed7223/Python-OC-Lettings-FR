@@ -4,3 +4,7 @@ env
 .env
 .media
 env/
+venv
+.venv
+.idea
+.coverage
