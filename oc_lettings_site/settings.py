@@ -46,7 +46,12 @@ LOGGING = {
     },
 }
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "python-oc-lettings-fr-site.onrender.com"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "python-oc-lettings-fr-site.onrender.com",
+    "imedloge.onrender.com"
+]
 
 # Application definition
 
