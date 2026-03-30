@@ -12,6 +12,12 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  build:
+    runs-on: node24
+    
+    steps:
+      - uses: actions/checkout@v4
+jobs:
   lint-test:
     runs-on: ubuntu-latest
 
