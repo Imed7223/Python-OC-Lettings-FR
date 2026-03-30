@@ -12,8 +12,10 @@ class LettingImageInline(admin.TabularInline):
 
     def image_preview(self, obj):
         if obj.image:
+            # On utilise une f-string sur plusieurs lignes ou on coupe la chaîne
             return format_html(
-                '<img src="{}" width="100" height="70" style="object-fit:cover;border-radius:4px"/>',
+                '<img src="{}" width="100" height="70" '
+                'style="object-fit:cover;border-radius:4px"/>',
                 obj.image.url
             )
         return "—"
@@ -27,7 +29,13 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(Letting)
 class LettingAdmin(admin.ModelAdmin):
-    list_display = ("title", "get_address", "price_per_night", "rooms", "area", "image_preview")
+    list_display = (
+        "title",
+        "get_address",
+        "price_per_night",
+        "rooms",
+        "area",
+        "image_preview")
     list_filter = ("address__city", "rooms")
     search_fields = ("title", "address__city", "address__street")
     inlines = [LettingImageInline]
@@ -39,7 +47,8 @@ class LettingAdmin(admin.ModelAdmin):
     def image_preview(self, obj):
         if obj.image:
             return format_html(
-                '<img src="{}" width="80" height="60" style="object-fit:cover;border-radius:4px"/>',
+                '<img src="{}" width="80" height="60" '
+                'style="object-fit:cover;border-radius:4px"/>',
                 obj.image.url
             )
         return "—"

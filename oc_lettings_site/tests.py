@@ -6,10 +6,6 @@ the expected content and template.
 
 import pytest
 from django.urls import reverse
-
-
-import pytest
-from django.urls import reverse
 from django.contrib.auth.models import User
 
 
@@ -23,6 +19,7 @@ def test_index_view_status_code(client):
 
     assert response.status_code == 200
     assert "Orange County Lettings" in response.content.decode()
+
 
 @pytest.mark.django_db
 def test_index_view_template(client):

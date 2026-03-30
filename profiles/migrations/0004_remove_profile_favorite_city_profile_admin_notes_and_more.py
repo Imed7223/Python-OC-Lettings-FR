@@ -24,33 +24,58 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            field=models.DateTimeField(
+                auto_now_add=True,
+                default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='profile',
             name='current_address',
-            field=models.CharField(blank=True, max_length=256, verbose_name='Adresse actuelle'),
+            field=models.CharField(
+                blank=True,
+                max_length=256,
+                verbose_name='Adresse actuelle'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
             name='date_of_birth',
-            field=models.DateField(blank=True, null=True, verbose_name='Date de naissance'),
+            field=models.DateField(
+                blank=True,
+                null=True,
+                verbose_name='Date de naissance'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
             name='employer_name',
-            field=models.CharField(blank=True, max_length=128, verbose_name='Employeur / Établissement'),
+            field=models.CharField(
+                blank=True,
+                max_length=128,
+                verbose_name='Employeur / Établissement'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
             name='guarantor_income',
-            field=models.DecimalField(blank=True, decimal_places=2, max_digits=8, null=True, verbose_name='Revenus mensuels du garant (€)'),
+            field=models.DecimalField(
+                blank=True,
+                decimal_places=2,
+                max_digits=8,
+                null=True,
+                verbose_name='Revenus mensuels du garant (€)'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
             name='guarantor_name',
-            field=models.CharField(blank=True, max_length=128, verbose_name='Nom du garant'),
+            field=models.CharField(
+                blank=True,
+                max_length=128,
+                verbose_name='Nom du garant'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
@@ -65,17 +90,33 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='id_document',
-            field=cloudinary.models.CloudinaryField(blank=True, max_length=255, null=True, verbose_name='CNI / Passeport'),
+            field=cloudinary.models.CloudinaryField(
+                blank=True,
+                max_length=255,
+                null=True,
+                verbose_name='CNI / Passeport'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
             name='monthly_income',
-            field=models.DecimalField(blank=True, decimal_places=2, max_digits=8, null=True, verbose_name='Revenus mensuels nets (€)'),
+            field=models.DecimalField(
+                blank=True,
+                decimal_places=2,
+                max_digits=8,
+                null=True,
+                verbose_name='Revenus mensuels nets (€)'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
             name='payslip',
-            field=cloudinary.models.CloudinaryField(blank=True, max_length=255, null=True, verbose_name='Fiche de paie'),
+            field=cloudinary.models.CloudinaryField(
+                blank=True,
+                max_length=255,
+                null=True,
+                verbose_name='Fiche de paie'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
@@ -85,17 +126,43 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='proof_of_address',
-            field=cloudinary.models.CloudinaryField(blank=True, max_length=255, null=True, verbose_name='Justificatif de domicile'),
+            field=cloudinary.models.CloudinaryField(
+                blank=True,
+                max_length=255,
+                null=True,
+                verbose_name='Justificatif de domicile'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
             name='situation',
-            field=models.CharField(blank=True, choices=[('employe', 'Employé'), ('independant', 'Indépendant / Auto-entrepreneur'), ('etudiant', 'Étudiant'), ('retraite', 'Retraité'), ('sans_emploi', 'Sans emploi'), ('autre', 'Autre')], max_length=20, verbose_name='Situation professionnelle'),
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ('employe', 'Employé'),
+                    ('independant', 'Indépendant / Auto-entrepreneur'),
+                    ('etudiant', 'Étudiant'),
+                    ('retraite', 'Retraité'),
+                    ('sans_emploi', 'Sans emploi'),
+                    ('autre', 'Autre')
+                ],
+                max_length=20,
+                verbose_name='Situation professionnelle'
+            ),
         ),
         migrations.AddField(
             model_name='profile',
             name='status',
-            field=models.CharField(choices=[('en_attente', 'En attente'), ('valide', 'Validé'), ('refuse', 'Refusé')], default='en_attente', max_length=20, verbose_name='Statut du dossier'),
+            field=models.CharField(
+                choices=[
+                    ('en_attente', 'En attente'),
+                    ('valide', 'Validé'),
+                    ('refuse', 'Refusé')
+                ],
+                default='en_attente',
+                max_length=20,
+                verbose_name='Statut du dossier'
+            ),
         ),
         migrations.AddField(
             model_name='profile',

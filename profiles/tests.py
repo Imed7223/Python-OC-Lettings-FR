@@ -24,6 +24,7 @@ def test_profiles_index_view(client):
     assert response.status_code == 200
     assert "john" in response.content.decode()
 
+
 @pytest.mark.django_db
 def test_profile_detail_view(client):
     """Test the profile detail view.

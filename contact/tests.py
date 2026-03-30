@@ -139,4 +139,3 @@ def test_contact_view_post_resets_form_on_success(client, settings):
 
     assert response.context["success"] is True
     assert response.context["form"].initial == {}
-    

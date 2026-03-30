@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "cloudinary_storage",
     "django.contrib.staticfiles",
-    "cloudinary", 
+    "cloudinary",
     "profiles",
     "lettings",
     "accounts",
@@ -169,7 +169,10 @@ EMAIL_BACKEND = os.getenv(
 )
 
 # En production : passe sur Gmail SMTP via .env
-EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend"
+    )
 EMAIL_HOST = os.getenv("EMAIL_HOST", "pro.eu.turbo-smtp.com")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"

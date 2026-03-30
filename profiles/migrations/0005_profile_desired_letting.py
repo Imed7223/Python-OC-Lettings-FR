@@ -15,6 +15,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='desired_letting',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='candidates', to='lettings.letting', verbose_name='Logement souhaité'),
+            field=models.ForeignKey(
+                                    blank=True,
+                                    null=True,
+                                    on_delete=django.db.models.deletion.SET_NULL,
+                                    related_name='candidates',
+                                    to='lettings.letting',
+                                    verbose_name='Logement souhaité'
+                                    ),
         ),
     ]

@@ -15,10 +15,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LettingImage',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', cloudinary.models.CloudinaryField(max_length=255, verbose_name='image')),
-                ('order', models.PositiveIntegerField(default=0, help_text="Ordre d'affichage")),
-                ('letting', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='gallery_images', to='lettings.letting')),
+                ('id', models.BigAutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')),
+                ('image', cloudinary.models.CloudinaryField(
+                    max_length=255,
+                    verbose_name='image')),
+                ('order', models.PositiveIntegerField(
+                    default=0,
+                    help_text="Ordre d'affichage")),
+                ('letting', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='gallery_images',
+                    to='lettings.letting')),
             ],
             options={
                 'verbose_name': 'Image galerie',

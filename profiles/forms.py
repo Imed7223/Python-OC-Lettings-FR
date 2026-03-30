@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth.models import User
 from profiles.models import Profile
 from lettings.models import Letting
 
@@ -47,7 +46,8 @@ class TenantProfileForm(forms.ModelForm):
             "has_guarantor": forms.CheckboxInput(attrs={"class": "form-check-input"}),
             "guarantor_name": forms.TextInput(attrs={"class": "form-control"}),
             "guarantor_income": forms.NumberInput(attrs={"class": "form-control"}),
-            "guarantor_on_smic": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+            "guarantor_on_smic": forms.CheckboxInput(
+                attrs={"class": "form-check-input"}),
         }
 
     def __init__(self, *args, **kwargs):

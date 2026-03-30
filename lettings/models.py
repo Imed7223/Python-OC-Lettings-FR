@@ -7,6 +7,7 @@ postal addresses and rental properties (lettings) in the system.
 from django.db import models
 from cloudinary.models import CloudinaryField
 
+
 class Address(models.Model):
     """Represents a postal address.
 
@@ -62,9 +63,7 @@ class Letting(models.Model):
     rooms = models.PositiveIntegerField(null=True, blank=True)
     area = models.PositiveIntegerField(null=True, blank=True, help_text="Surface en m²")
 
-
     class Meta:
-        
         """Django model metadata for Letting."""
 
         verbose_name_plural = "Addresses"
@@ -84,7 +83,7 @@ class Letting(models.Model):
             Letting.objects.filter(pk=self.pk).update(reference=self.reference)
         else:
             super().save(*args, **kwargs)
-    
+
     def all_images(self):
         """Retourne toutes les images : principale + galerie, max 10."""
         images = []
@@ -93,6 +92,7 @@ class Letting(models.Model):
         for img in self.gallery_images.all()[:9]:
             images.append(img.image)
         return images[:10]
+
 
 class LettingImage(models.Model):
     """Image supplémentaire liée à une location."""

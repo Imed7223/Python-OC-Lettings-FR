@@ -6,9 +6,7 @@ linked to a Django User account.
 
 from django.contrib.auth.models import User
 from django.db import models
-import lettings
 from cloudinary.models import CloudinaryField
-from lettings.models import Letting
 
 
 class Profile(models.Model):
@@ -32,9 +30,17 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # Informations personnelles
-    date_of_birth = models.DateField(null=True, blank=True, verbose_name="Date de naissance")
+    date_of_birth = models.DateField(
+                                    null=True,
+                                    blank=True,
+                                    verbose_name="Date de naissance"
+                                    )
     phone = models.CharField(max_length=20, blank=True, verbose_name="Téléphone")
-    current_address = models.CharField(max_length=256, blank=True, verbose_name="Adresse actuelle")
+    current_address = models.CharField(
+                                        max_length=256,
+                                        blank=True,
+                                        verbose_name="Adresse actuelle"
+                                        )
 
     # Situation professionnelle
     situation = models.CharField(
@@ -43,7 +49,11 @@ class Profile(models.Model):
         blank=True,
         verbose_name="Situation professionnelle"
     )
-    employer_name = models.CharField(max_length=128, blank=True, verbose_name="Employeur / Établissement")
+    employer_name = models.CharField(
+                                    max_length=128,
+                                    blank=True,
+                                    verbose_name="Employeur / Établissement"
+                                    )
     monthly_income = models.DecimalField(
         max_digits=8,
         decimal_places=2,
@@ -54,7 +64,11 @@ class Profile(models.Model):
 
     # Garant
     has_guarantor = models.BooleanField(default=False, verbose_name="A un garant")
-    guarantor_name = models.CharField(max_length=128, blank=True, verbose_name="Nom du garant")
+    guarantor_name = models.CharField(
+                                    max_length=128,
+                                    blank=True,
+                                    verbose_name="Nom du garant"
+                                    )
     guarantor_income = models.DecimalField(
         max_digits=8,
         decimal_places=2,
@@ -68,8 +82,16 @@ class Profile(models.Model):
     )
 
     # Pièces justificatives
-    id_document = CloudinaryField("CNI / Passeport", blank=True, null=True)
-    proof_of_address = CloudinaryField("Justificatif de domicile", blank=True, null=True)
+    id_document = CloudinaryField(
+                        "CNI / Passeport",
+                        blank=True,
+                        null=True
+                        )
+    proof_of_address = CloudinaryField(
+                        "Justificatif de domicile",
+                        blank=True,
+                        null=True
+                        )
     payslip = CloudinaryField("Fiche de paie", blank=True, null=True)
 
     # Statut du dossier
@@ -87,12 +109,12 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     desired_letting = models.ForeignKey(
-    'lettings.Letting',
-    on_delete=models.SET_NULL,
-    null=True,
-    blank=True,
-    verbose_name="Logement souhaité",
-    related_name="candidates"
+        'lettings.Letting',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Logement souhaité",
+        related_name="candidates"
     )
 
     def __str__(self):
@@ -113,4 +135,3 @@ class Profile(models.Model):
         if self.guarantor_income:
             return self.guarantor_income <= SMIC_NET
         return False
-
