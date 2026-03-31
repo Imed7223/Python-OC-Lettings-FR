@@ -51,7 +51,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "python-oc-lettings-fr-site.onrender.com",
     "imedloge.onrender.com",
-    ".railway.app"
+    "python-oc-lettings-fr-production-696a.up.railway.app"
 ]
 
 # Application definition
