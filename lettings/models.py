@@ -84,8 +84,16 @@ class Letting(models.Model):
         else:
             super().save(*args, **kwargs)
 
+    @property                          # ← à l'intérieur de Letting
+    def image_url(self):
+        """Retourne l'URL de l'image principale ou None."""
+        try:
+            return self.image.url if self.image else None
+        except Exception:
+            return None
+
     def all_images(self):
-        """Retourne toutes les images : principale + galerie, max 10."""
+        """Retourne toutes les URLs d'images : principale + galerie, max 10."""
         images = []
         if self.image:
             images.append(self.image.url)
