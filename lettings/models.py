@@ -88,9 +88,9 @@ class Letting(models.Model):
         """Retourne toutes les images : principale + galerie, max 10."""
         images = []
         if self.image:
-            images.append(self.image)
+            images.append(self.image.url)
         for img in self.gallery_images.all()[:9]:
-            images.append(img.image)
+            images.append(img.image.url)
         return images[:10]
 
 

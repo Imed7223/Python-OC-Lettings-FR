@@ -18,10 +18,10 @@
             {% with images=letting.all_images %}
             {% if images %}
                 {% if images|length == 1 %}
-                    <img src="{{ images.0.url }}"
-                         class="w-100 rounded mb-4"
-                         alt="{{ title }}"
-                         style="max-height:450px; object-fit:cover;">
+                    <img src="{{ images.0 }}"   {# ← plus de .url #}
+                        class="w-100 rounded mb-4"
+                        alt="{{ title }}"
+                        style="max-height:450px; object-fit:cover;">
                 {% else %}
                     <div id="carouselLetting" class="carousel slide mb-4" data-bs-ride="carousel">
                         <div class="carousel-indicators">
@@ -37,7 +37,7 @@
                         <div class="carousel-inner rounded">
                             {% for img in images %}
                                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                    <img src="{{ img.url }}"
+                                        <img src="{{ img }}"
                                          class="d-block w-100"
                                          alt="{{ title }} — photo {{ forloop.counter }}"
                                          style="height:450px; object-fit:cover;">
