@@ -189,4 +189,3 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "propaie19@gmail.com")
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "propaie19@gmail.com")
 
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-
