@@ -145,8 +145,8 @@ USE_L10N = True
 USE_TZ = True
 
 
-STATIC_URL = "lettings/static/"
-STATIC_ROOT = BASE_DIR / "lettings/staticfiles"
+STATIC_URL = "PYTHON-OC-LETTINGS-FR/static/"
+STATIC_ROOT = BASE_DIR / "PYTHON-OC-LETTINGS-FR/staticfiles"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -155,7 +155,14 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuration pour servir les fichiers statiques en production avec WhiteNoise
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
