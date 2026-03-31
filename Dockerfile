@@ -17,4 +17,4 @@ COPY test_db.sqlite3 /app/test_db.sqlite3
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["sh", "-c", "echo '=== contenu /app/static ===' && ls /app/static/ && python manage.py collectstatic --noinput && gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000"]
